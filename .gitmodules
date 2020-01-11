@@ -1,3 +1,6 @@
 [submodule "Arduino-Makefile"]
 	path = Arduino-Makefile
 	url = git@github.com:sudar/Arduino-Makefile.git
+[submodule "Keypad"]
+	path = Keypad
+	url = git@github.com:Chris--A/Keypad.git
