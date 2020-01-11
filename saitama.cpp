@@ -85,6 +85,8 @@ void loop()
         buzz();
 
     // TODO: get check for user input.
+    char c = pad.waitForKey();
+    Serial.println(c);
 
     // if we need to update the alarm, then do so.
     if (pad.getKey() == CHANGETIME)

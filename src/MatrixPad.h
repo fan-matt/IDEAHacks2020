@@ -29,8 +29,8 @@ char keys[ROWS][COLS] = {
     {K7, K8, K9},
     {KT, K0, KA}
 };
-byte rowPins[ROWS] = {0, 1, 2, 3};
-byte colPins[COLS] = {4, 5, 6};
+byte rowPins[ROWS] = {12, 11, 10, 9};
+byte colPins[COLS] = {8, 7, 6};
 
 #define MATRIXPAD Keypad(makeKeymap(keys), rowPins, colPins, ROWS, COLS)
 
