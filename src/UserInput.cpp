@@ -34,8 +34,11 @@ ATime UserInput::getInputTime() const
     return ATime(hours, minutes);
 }
 
+// update UserInput to reflect most recent
+// input.
 void UserInput::update()
 {
+    // update keys being pressed.
     m_count = 0;
     if (m_pad.getKeys())
     {
@@ -52,5 +55,12 @@ void UserInput::update()
         }
     }
 
-    // TODO: update from accelerometer data.
+    // update from accelerometer data.
+    int* acc = m_accel.read();
+    if (acc[0] > HIT_THRESHOLD
+        || acc[1] > HIT_THRESHOLD
+        || acc[2] > HIT_THRESHOLD)
+        m_hit = true;
+    else
+        m_hit = false;
 }

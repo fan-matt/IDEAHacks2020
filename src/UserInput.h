@@ -1,6 +1,8 @@
 #ifndef USERINPUT_H_
 #define USERINPUT_H_
 
+#define HIT_THRESHOLD 200
+
 #include "Accel.h"
 #include "ATime.h"
 #include "../Keypad/src/Keypad.h"
