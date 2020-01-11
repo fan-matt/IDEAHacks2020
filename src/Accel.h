@@ -3,6 +3,7 @@
 
 class Accel
 {
+public:
     Accel(const int);
 };
 
