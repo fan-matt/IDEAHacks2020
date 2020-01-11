@@ -6,10 +6,12 @@ ATime currentTime;
 ATime alarm;
 ATime timer;
 int seconds;
+bool updated;
 Keypad pad = MATRIXPAD;
 
 // get the time from the keypad and return
 // it as a struct.
+// TODO
 ATime getInputTime()
 {
     return ATime();
@@ -35,10 +37,21 @@ ATime getInputTime()
 // update the internal clock.
 void updateTime()
 {
+    if (millis() % 1000 != 0)
+        updated = false;
+
     // clock test, should blink once a second.
-    seconds++;
-    Serial.print(seconds);
-    Serial.println(" have passed");
+    if (!updated && millis() % 1000 == 0)
+    {
+        updated = true;
+        seconds++;
+        Serial.print("current time: ");
+        Serial.print(currentTime.hours);
+        Serial.print(':');
+        Serial.print(currentTime.minutes);
+        Serial.print(':');
+        Serial.println(seconds);
+    }
 
     if (seconds >= 60)
     {
@@ -54,8 +67,6 @@ void updateTime()
 
     if (currentTime.hours > 12)
         currentTime.hours = 1;
-
-    delay(1000);
 }
 
 // buzz the motor.
@@ -75,7 +86,6 @@ void setup()
 
     // set up pins.
     Serial.begin(9600);
-    pinMode(LED_BUILTIN, OUTPUT);
 }
 
 void loop()
@@ -110,6 +120,7 @@ void loop()
         currentTime = getInputTime();
     }
     if (updatedCount == 1)
+    {
         switch (pressed[0])
         {
         case KA:
@@ -120,6 +131,7 @@ void loop()
             Serial.println("Set the timer.");
             timer = getInputTime();
         }
+    }
 
     updateTime();
 }
