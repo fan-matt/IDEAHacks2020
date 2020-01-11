@@ -1,9 +1,11 @@
 #include <Arduino.h>
 #include "src/ATime.h"
+#include "src/MatrixPad.h"
 
 ATime currentTime;
 ATime alarm;
 int seconds;
+Keypad pad = MATRIXPAD;
 
 // get the time from the keypad and return
 // it as a struct.
@@ -11,6 +13,9 @@ ATime getInputTime()
 {
     return ATime();
 }
+
+// buzz the motor.
+void buzz() {}
 
 // by default open setTime.
 void setup()
@@ -24,10 +29,22 @@ void setup()
 void loop()
 {
     // buzz buzz
-    //if (currentTime == alarm)
-    //  buzz();
+    if (currentTime == alarm)
+        buzz();
 
-    seconds++;
+    // check for user input.
+    if (pad.getKeys())
+    {
+        // TODO: handle input.
+    }
+
+    // if we need to update the time, then do so.
+    if (pad.getKey() == CHANGETIME)
+        alarm = getInputTime();
+
+    if (!(millis() % 1000))
+        seconds++;
+
     if (seconds > 60)
     {
       seconds = 0;
@@ -42,8 +59,6 @@ void loop()
 
     if (currentTime.hours > 12)
       currentTime.hours = 1;
-
-    delay(1000);
 }
 
 int main()
