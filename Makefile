@@ -7,6 +7,6 @@ AVRDUDE_CONF=/etc/avrdude.conf
 ARDUINO_LIBS=
 BOARD_TAG=nano328
 MONITOR_PORT=/dev/				# TODO: Always set this before upload
-LOCAL_CPP_SRCS=$(PWD)/src/ATime.cpp $(PWD)/saitama.cpp
+LOCAL_CPP_SRCS=$(PWD)/Keypad/src/Key.cpp $(PWD)/Keypad/src/Keypad.cpp $(PWD)/src/ATime.cpp $(PWD)/saitama.cpp
 
 include ./Arduino-Makefile/Arduino.mk
