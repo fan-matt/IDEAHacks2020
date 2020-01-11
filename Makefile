@@ -1,3 +1,4 @@
+# Arduino-Makefile Vars
 ARDUINO_DIR=/usr/share/arduino
 ARDMK_DIR=./Arduino-Makefile
 AVR_TOOLS_DIR=/usr
