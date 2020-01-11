@@ -12,18 +12,70 @@ Keypad pad = MATRIXPAD;
 ATime getInputTime()
 {
     return ATime();
+    char first;
+    char second;
+    
+    // get hours
+    for (int k = 0; k < 2; k++)
+    {
+        first = pad.waitForKey() - '0';
+        second = pad.waitForKey() - '0';
+    }
+
+    for (int k = 0; k < 2; k++)
+    {
+        first = pad.waitForKey()  - '0';
+        second = pad.waitForKey() - '0';
+    }
+
+    return ATime();
+}
+
+// update the internal clock.
+void updateTime()
+{
+    // clock test, should blink once a second.
+    seconds++;
+    Serial.println(seconds);
+    Serial.println("have passed");    
+
+    if (seconds >= 60)
+    {
+        seconds = 0;
+        currentTime.minutes++;
+    }
+
+    if (currentTime.minutes >= 60)
+    {
+        currentTime.minutes = 0;
+        currentTime.hours++;
+    }
+
+    if (currentTime.hours > 12)
+        currentTime.hours = 1;
+
+    delay(1000);
+    digitalWrite(LED_BUILTIN, LOW);
 }
 
 // buzz the motor.
-void buzz() {}
+void buzz()
+{
+}
 
 // by default open setTime.
 void setup()
 {
-    currentTime.reset();
+    // set current time.
+    currentTime = getInputTime();
     seconds = 0;
 
-    alarm = getInputTime();
+    // alarm defaults to midnight.
+    alarm.reset();
+
+    // set up pins.
+    Serial.begin(9600);
+    pinMode(LED_BUILTIN, OUTPUT);
 }
 
 void loop()
@@ -32,33 +84,13 @@ void loop()
     if (currentTime == alarm)
         buzz();
 
-    // check for user input.
-    if (pad.getKeys())
-    {
-        // TODO: handle input.
-    }
+    // TODO: get check for user input.
 
-    // if we need to update the time, then do so.
+    // if we need to update the alarm, then do so.
     if (pad.getKey() == CHANGETIME)
         alarm = getInputTime();
 
-    if (!(millis() % 1000))
-        seconds++;
-
-    if (seconds > 60)
-    {
-      seconds = 0;
-      currentTime.minutes++;
-    }
-
-    if (currentTime.minutes >= 60)
-    {
-      currentTime.minutes = 0;
-      currentTime.hours++;
-    }
-
-    if (currentTime.hours > 12)
-      currentTime.hours = 1;
+    updateTime();
 }
 
 int main()
