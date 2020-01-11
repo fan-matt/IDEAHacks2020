@@ -4,6 +4,7 @@
 
 ATime currentTime;
 ATime alarm;
+ATime timer;
 int seconds;
 Keypad pad = MATRIXPAD;
 
@@ -36,8 +37,8 @@ void updateTime()
 {
     // clock test, should blink once a second.
     seconds++;
-    Serial.println(seconds);
-    Serial.println("have passed");    
+    Serial.print(seconds);
+    Serial.println(" have passed");
 
     if (seconds >= 60)
     {
@@ -55,7 +56,6 @@ void updateTime()
         currentTime.hours = 1;
 
     delay(1000);
-    digitalWrite(LED_BUILTIN, LOW);
 }
 
 // buzz the motor.
@@ -84,13 +84,42 @@ void loop()
     if (currentTime == alarm)
         buzz();
 
-    // TODO: get check for user input.
-    char c = pad.waitForKey();
-    Serial.println(c);
+    // get check for user input.
+    // check if we need to set a timer, update the alarm, or set the time.
+    char pressed[LIST_MAX];
+    int updatedCount = 0;
+    if (pad.getKeys())
+    {
+        for (int k = 0; k < LIST_MAX; k++)
+        {
+            if (!pad.key[k].stateChanged)
+                continue;
+            
+            if (pad.key[k].kstate == PRESSED)
+            {
+                pressed[updatedCount] = pad.key[k].kchar;
+                updatedCount++;
+            }
+        }
+    }
 
-    // if we need to update the alarm, then do so.
-    if (pad.getKey() == CHANGETIME)
-        alarm = getInputTime();
+    // check the keys that are pressed at this instant.
+    if (updatedCount == 2 && (pressed[0] | pressed[1]) == CHANGETIME)
+    {
+        Serial.println("Update the current time.");
+        currentTime = getInputTime();
+    }
+    if (updatedCount == 1)
+        switch (pressed[0])
+        {
+        case KA:
+            Serial.println("Set the alarm.");
+            alarm = getInputTime();
+            break;
+        case KT:
+            Serial.println("Set the timer.");
+            timer = getInputTime();
+        }
 
     updateTime();
 }
