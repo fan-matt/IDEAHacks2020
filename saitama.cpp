@@ -10,25 +10,32 @@ ATime currentTime;
 ATime alarm;
 ATime timer;
 bool updated;
+bool buzzing;
 Keypad pad = MATRIXPAD;
 UserInput u(pad, Accel(ACCELPIN));
 
 // buzz the motor.
 void toggleBuzz()
 {
+    buzzing = !buzzing;
+    Serial.println("BUZZ");
 }
 
 // by default open setTime.
 void setup()
 {
+    // set up pins.
+    Serial.begin(9600);
+    
     // set current time.
-    //currentTime = getInputTime();
+    Serial.println("Input the time:");
+    currentTime = u.getInputTime();
 
     // alarm defaults to midnight.
     alarm.reset();
 
-    // set up pins.
-    Serial.begin(9600);
+    // buzz buzz
+    buzzing = false;
 }
 
 void loop()
