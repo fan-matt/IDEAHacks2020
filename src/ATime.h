@@ -5,6 +5,7 @@
 struct ATime
 {
   ATime();
+  ATime(const int, const int);
   ATime& operator=(const ATime& t);
   bool operator==(const ATime& t) const;
   void reset();

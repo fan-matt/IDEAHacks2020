@@ -3,6 +3,10 @@
 ATime::ATime()
       : hours(0), minutes(0) {}
 
+// TODO: Sanitize input
+ATime::ATime(const int hours, const int minutes)
+      : hours(hours), minutes(minutes) {}
+
 ATime& ATime::operator=(const ATime& t)
 {
   if (&t == this)

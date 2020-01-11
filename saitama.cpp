@@ -11,27 +11,32 @@ Keypad pad = MATRIXPAD;
 
 // get the time from the keypad and return
 // it as a struct.
-// TODO
+// this is a blocking function, and will
+// interrupt the internal clock.
 ATime getInputTime()
 {
-    return ATime();
+    int hours;
+    int minutes;
+    Serial.println("Updating time.");
     char first;
     char second;
     
     // get hours
-    for (int k = 0; k < 2; k++)
-    {
-        first = pad.waitForKey() - '0';
-        second = pad.waitForKey() - '0';
-    }
+    first = pad.waitForKey() - '0';
+    second = pad.waitForKey() - '0';
+    hours = first * 10 + second;
 
-    for (int k = 0; k < 2; k++)
-    {
-        first = pad.waitForKey()  - '0';
-        second = pad.waitForKey() - '0';
-    }
+    Serial.print("Hour: ");
+    Serial.println(hours);
 
-    return ATime();
+    first = pad.waitForKey()  - '0';
+    second = pad.waitForKey() - '0';
+    minutes = first * 10 + second;
+
+    Serial.print("Minute: ");
+    Serial.println(minutes);
+
+    return ATime(hours, minutes);
 }
 
 // update the internal clock.
@@ -44,13 +49,13 @@ void updateTime()
     if (!updated && millis() % 1000 == 0)
     {
         updated = true;
-        seconds++;
         Serial.print("current time: ");
         Serial.print(currentTime.hours);
         Serial.print(':');
         Serial.print(currentTime.minutes);
         Serial.print(':');
         Serial.println(seconds);
+        seconds++;
     }
 
     if (seconds >= 60)
@@ -78,7 +83,7 @@ void buzz()
 void setup()
 {
     // set current time.
-    currentTime = getInputTime();
+    //currentTime = getInputTime();
     seconds = 0;
 
     // alarm defaults to midnight.
