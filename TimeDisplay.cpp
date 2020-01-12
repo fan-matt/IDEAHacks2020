@@ -23,8 +23,6 @@ void TimeDisplay::start()
 
 void TimeDisplay::setTime(ATime time)
 {
-
-
     alpha4.writeDigitAscii(0, (time.hours / 10) + '0');
     alpha4.writeDigitAscii(1, (time.hours % 10) + '0');
     alpha4.writeDigitAscii(2, (time.minutes / 10) + '0');

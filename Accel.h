@@ -15,16 +15,14 @@ public:
     void updateAccel();
     int* readAccel() const;
     bool bigShift() const;
-
-private:
     int m_powerPin;
     int m_groundPin;
-    int m_prevX;
-    int m_prevY;
-    int m_prevZ;
-    int m_x;
-    int m_y;
-    int m_z;
+    double m_prevX;
+    double m_prevY;
+    double m_prevZ;
+    double m_x;
+    double m_y;
+    double m_z;
 
     Adafruit_ADXL345_Unified m_acc;
 

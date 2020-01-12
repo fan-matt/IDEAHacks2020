@@ -1,7 +1,6 @@
 #include <Arduino.h>
 #include "ATime.h"
 #include "UserInput.h"
-#include "Accel.h"
 #include "Buzzer.h"
 #include "MatrixPad.h"
 #include "TimeDisplay.h"
@@ -12,13 +11,19 @@
 #define M2P1 4
 #define M2P2 5
 
+// Accelerometer diff.
+#define HIT_THRESHOLD 50
+
+double m_x, m_y, m_z, m_prevX, m_prevY, m_prevZ;
+
 ATime currentTime;
 ATime alarm;
 ATime timer;
 bool updated;
 Buzzer b(M1P1, M1P2, M2P1, M2P2);
 TimeDisplay tDisplay;
-UserInput u(MATRIXPAD, Accel());
+Adafruit_ADXL345_Unified acc;
+UserInput u(MATRIXPAD);
 
 // by default open setTime.
 void setup()
@@ -34,11 +39,23 @@ void setup()
 
     // alarm defaults to midnight.
     alarm.reset();
-    u.start();
+
+    // start accel
+    m_x = 0;
+    m_y = 0;
+    m_z = 0;
+    m_prevX = 0;
+    m_prevY = 0;
+    m_prevZ = 0;
+    acc = Adafruit_ADXL345_Unified(12345);
+    if (!acc.begin()){
+      Serial.println("this shit broke dog");
+    }
+    acc.setRange(ADXL345_RANGE_16_G);
 }
 
 void loop()
-{
+{  
     // buzz buzz
     if (currentTime == alarm)
         b.buzz();
@@ -48,7 +65,9 @@ void loop()
     u.update();
 
     // if the pillow is being hit, stop the buzzing.
-    if (u.hit())
+    if (abs((m_prevX - m_x)) > HIT_THRESHOLD ||
+        abs((m_prevY - m_y)) > HIT_THRESHOLD ||
+        abs((m_prevZ - m_z)) > HIT_THRESHOLD)
         b.stop();
 
     // check the keys that are pressed at this instant.
@@ -83,9 +102,22 @@ void loop()
         Serial.print(':');
         Serial.print(currentTime.minutes);
         Serial.print(':');
-        Serial.println(currentTime.seconds);
+        Serial.print(currentTime.seconds);
+        Serial.print(" accel X: ");
+        Serial.println(m_x);
         updated = true;
+
+        tDisplay.setTime(currentTime);
     }
 
-    tDisplay.setTime(currentTime);
+    // Read from accelerometer, update readings and previous reading.
+    sensors_event_t e;
+    acc.getEvent(&e);
+
+    m_prevX = m_x;
+    m_prevY = m_y;
+    m_prevZ = m_z;
+    m_x = e.acceleration.x;
+    m_y = e.acceleration.y;
+    m_z = e.acceleration.z;
 }

@@ -11,9 +11,7 @@ class UserInput
 {
 public:
     // TODO: Add display functionality.
-    UserInput(Keypad, Accel);
-
-    void start();
+    UserInput(Keypad);
 
     int len() const;
     char operator[](const int) const;

@@ -1,19 +1,11 @@
 #include "UserInput.h"
 
-UserInput::UserInput(Keypad k, Accel a)
-          : m_pad(k), m_accel(a) {}
-
-void UserInput::start()
-{
-  m_accel.start();
-}
+UserInput::UserInput(Keypad k)
+          : m_pad(k) {}
 
 int UserInput::len() const { return m_count; }
 
 char UserInput::operator[](const int i) const { return m_pressed[i]; }
-
-// return whether the user has hit the pillow.
-bool UserInput::hit() const { return false; }
 
 // get the time from the keypad and return
 // it as a struct.
@@ -59,8 +51,4 @@ void UserInput::update()
             }
         }
     }
-
-    // update from accelerometer data.
-    m_accel.updateAccel();
-    m_hit = m_accel.bigShift();
 }
