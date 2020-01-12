@@ -13,6 +13,8 @@ public:
     // TODO: Add display functionality.
     UserInput(Keypad, Accel);
 
+    void start();
+
     int len() const;
     char operator[](const int) const;
     bool hit() const;

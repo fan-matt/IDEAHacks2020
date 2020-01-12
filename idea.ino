@@ -6,13 +6,6 @@
 #include "MatrixPad.h"
 #include "TimeDisplay.h"
 
-// Accelerometer pins
-#define ACCELPOWER 1
-#define ACCELGROUND 2
-#define ACCELX 3
-#define ACCELY 4
-#define ACCELZ 5
-
 // Motor pins
 #define M1P1 2
 #define M1P2 3
@@ -25,7 +18,7 @@ ATime timer;
 bool updated;
 Buzzer b(M1P1, M1P2, M2P1, M2P2);
 TimeDisplay tDisplay;
-UserInput u(MATRIXPAD, Accel(ACCELPOWER, ACCELGROUND, ACCELX, ACCELY, ACCELZ));
+UserInput u(MATRIXPAD, Accel());
 
 // by default open setTime.
 void setup()
@@ -41,6 +34,7 @@ void setup()
 
     // alarm defaults to midnight.
     alarm.reset();
+    u.start();
 }
 
 void loop()

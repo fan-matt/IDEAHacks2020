@@ -3,6 +3,11 @@
 UserInput::UserInput(Keypad k, Accel a)
           : m_pad(k), m_accel(a) {}
 
+void UserInput::start()
+{
+  m_accel.start();
+}
+
 int UserInput::len() const { return m_count; }
 
 char UserInput::operator[](const int i) const { return m_pressed[i]; }
