@@ -1,6 +1,8 @@
 #ifndef ACCEL_H_
 #define ACCEL_H_
 
+#include <Adafruit_ADXL345_U.h>
+
 // Threshold beyond which a hit is registered.
 #define HIT_THRESHOLD 200
 
@@ -15,7 +17,7 @@ public:
 
 private:
     int m_powerPin;
-    int m_ground;
+    int m_groundPin;
     int m_prevX;
     int m_prevY;
     int m_prevZ;
@@ -23,7 +25,9 @@ private:
     int m_y;
     int m_z;
 
-    int abs(int) const;
+    Adafruit_ADXL345_Unified m_acc;
+
+    int absolute(int) const;
 };
 
 #endif  // ACCEL_H_

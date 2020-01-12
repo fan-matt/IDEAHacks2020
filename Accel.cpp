@@ -2,31 +2,29 @@
 #include <Arduino.h>
 
 Accel::Accel(int power, int ground, int x, int y, int z)
-      : m_powerPin(power), m_ground(ground), m_x(x), m_y(y), m_z(z)
+      : m_acc(Adafruit_ADXL345_Unified()), m_powerPin(power), m_groundPin(ground), m_x(x), m_y(y), m_z(z)
 {
     pinMode(m_powerPin, OUTPUT);
-    pinMode(m_ground, OUTPUT);
-    digitalWrite(m_ground, LOW);
+    pinMode(m_groundPin, OUTPUT);
+    digitalWrite(m_groundPin, LOW);
     digitalWrite(m_powerPin, HIGH);
+    m_acc.begin();
+    m_acc.setRange(ADXL345_RANGE_16_G);
 }
 
 // read from the accelerometer and update its readings.
 void Accel::updateAccel()
 {
     // TODO: Read from accelerometer, update readings and previous reading.
-}
+    sensors_event_t e;
+    m_acc.getEvent(&e);
 
-// return an array of three integers, being the
-// readings for the x, y, and z acceleration
-// of the accelerometer at the current time.
-int* Accel::readAccel() const
-{
-    int a = analogRead(m_x);
-    int b = analogRead(m_y);
-    int c = analogRead(m_z);
-
-    int res[3] = {a, b, c};
-    return res;
+    m_prevX = m_x;
+    m_prevY = m_y;
+    m_prevZ = m_z;
+    m_x = e.acceleration.x;
+    m_y = e.acceleration.y;
+    m_z = e.acceleration.z;
 }
 
 // returns whether the accelerometer has moved a "big" amount
@@ -39,4 +37,4 @@ bool Accel::bigShift() const
 }
 
 // absolute value.
-int Accel::abs(int i) const { return i < 0 ? i*-1 : i; }
+int Accel::absolute(int i) const { return i < 0 ? i*-1 : i; }
