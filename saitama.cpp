@@ -4,19 +4,18 @@
 #include "src/Accel.h"
 #include "src/MatrixPad.h"
 
-#define ACCELPOWER
-#define ACCELGROUND
-#define ACCELX
-#define ACCELY
-#define ACCELZ
+#define ACCELPOWER 1
+#define ACCELGROUND 2
+#define ACCELX 3
+#define ACCELY 4
+#define ACCELZ 5
 
 ATime currentTime;
 ATime alarm;
 ATime timer;
 bool updated;
 bool buzzing;
-Keypad pad = MATRIXPAD;
-UserInput u(pad, Accel(ACCELPOWER, ACCELGROUND, ACCELX, ACCELY, ACCELZ));
+UserInput u(MATRIXPAD, Accel(ACCELPOWER, ACCELGROUND, ACCELX, ACCELY, ACCELZ));
 
 // buzz the motor.
 void toggleBuzz()
