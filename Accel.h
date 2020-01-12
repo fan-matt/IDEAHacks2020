@@ -10,7 +10,8 @@
 class Accel
 {
 public:
-    Accel(int, int, int, int, int);
+    Accel();
+    void start();
     void updateAccel();
     int* readAccel() const;
     bool bigShift() const;

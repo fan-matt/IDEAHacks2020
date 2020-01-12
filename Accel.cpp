@@ -1,15 +1,17 @@
 #include "Accel.h"
 #include <Arduino.h>
 
-Accel::Accel(int power, int ground, int x, int y, int z)
-      : m_acc(Adafruit_ADXL345_Unified()), m_powerPin(power), m_groundPin(ground), m_x(x), m_y(y), m_z(z)
+Accel::Accel()
+      : m_prevX(0), m_prevY(0), m_prevZ(0),
+        m_x(0), m_y(0), m_z(0)
 {
-    pinMode(m_powerPin, OUTPUT);
-    pinMode(m_groundPin, OUTPUT);
-    digitalWrite(m_groundPin, LOW);
-    digitalWrite(m_powerPin, HIGH);
-    m_acc.begin();
-    m_acc.setRange(ADXL345_RANGE_16_G);
+}
+
+void Accel::start()
+{
+  m_acc = Adafruit_ADXL345_Unified(12345);
+  m_acc.begin();
+  m_acc.setRange(ADXL345_RANGE_16_G);
 }
 
 // read from the accelerometer and update its readings.
