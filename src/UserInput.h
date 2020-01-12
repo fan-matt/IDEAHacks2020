@@ -10,6 +10,7 @@
 class UserInput
 {
 public:
+    // TODO: Add display functionality.
     UserInput(Keypad, Accel);
 
     int len() const;

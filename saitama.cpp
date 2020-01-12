@@ -2,27 +2,28 @@
 #include "src/ATime.h"
 #include "src/UserInput.h"
 #include "src/Accel.h"
+#include "src/Buzzer.h"
 #include "src/MatrixPad.h"
 
+// Accelerometer pins
 #define ACCELPOWER 1
 #define ACCELGROUND 2
 #define ACCELX 3
 #define ACCELY 4
 #define ACCELZ 5
 
+// Motor pins
+#define M1P1 2
+#define M1P2 3
+#define M2P1 4
+#define M2P2 5
+
 ATime currentTime;
 ATime alarm;
 ATime timer;
 bool updated;
-bool buzzing;
+Buzzer b(M1P1, M1P2, M2P1, M2P2);
 UserInput u(MATRIXPAD, Accel(ACCELPOWER, ACCELGROUND, ACCELX, ACCELY, ACCELZ));
-
-// buzz the motor.
-void toggleBuzz()
-{
-    buzzing = !buzzing;
-    Serial.println("BUZZ");
-}
 
 // by default open setTime.
 void setup()
@@ -36,16 +37,13 @@ void setup()
 
     // alarm defaults to midnight.
     alarm.reset();
-
-    // buzz buzz
-    buzzing = false;
 }
 
 void loop()
 {
     // buzz buzz
     if (currentTime == alarm)
-        toggleBuzz();
+        b.buzz();
 
     // check for user input.
     // check if we need to set a timer, update the alarm, or set the time.
@@ -53,7 +51,7 @@ void loop()
 
     // if the pillow is being hit, stop the buzzing.
     if (u.hit())
-        toggleBuzz();
+        b.stop();
 
     // check the keys that are pressed at this instant.
     if (u.len() == 2 && (u[0] | u[1]) == CHANGETIME)
