@@ -17,8 +17,6 @@ public:
     bool bigShift() const;
 
 private:
-    int m_powerPin;
-    int m_groundPin;
     int m_prevX;
     int m_prevY;
     int m_prevZ;
