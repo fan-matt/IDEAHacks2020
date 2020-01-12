@@ -13,7 +13,7 @@
 #define M2P2 5
 
 // Accelerometer diff.
-#define HIT_THRESHOLD 50
+#define HIT_THRESHOLD 5
 
 double m_x, m_y, m_z, m_prevX, m_prevY, m_prevZ;
 
@@ -21,6 +21,7 @@ ATime currentTime;
 ATime alarm;
 ATime timer;
 bool updated;
+bool turnedOffAlready;
 Buzzer b(M1P1, M1P2, M2P1, M2P2);
 TimeDisplay tDisplay;
 Adafruit_ADXL345_Unified acc;
@@ -40,6 +41,7 @@ void setup()
 
     // alarm defaults to midnight.
     alarm.reset();
+    turnedOffAlready = false;
 
     // start accel
     m_x = 0;
@@ -58,8 +60,11 @@ void setup()
 void loop()
 {  
     // buzz buzz
-    if (currentTime == alarm)
+    if (currentTime == alarm && !turnedOffAlready)
+    {
         b.buzz();
+    } else if (!(currentTime == alarm))
+      turnedOffAlready = false;
 
     // check for user input.
     // check if we need to set a timer, update the alarm, or set the time.
@@ -69,7 +74,10 @@ void loop()
     if (abs((m_prevX - m_x)) > HIT_THRESHOLD ||
         abs((m_prevY - m_y)) > HIT_THRESHOLD ||
         abs((m_prevZ - m_z)) > HIT_THRESHOLD)
+    {
         b.stop();
+        turnedOffAlready = true;
+    }
 
     // check the keys that are pressed at this instant.
     if (u.len() == 2 && (u[0] | u[1]) == CHANGETIME)
@@ -109,9 +117,8 @@ void loop()
         updated = true;
 
         tDisplay.setTime(currentTime);
-    }
 
-    // Read from accelerometer, update readings and previous reading.
+        // Read from accelerometer, update readings and previous reading.
     sensors_event_t e;
     acc.getEvent(&e);
 
@@ -121,4 +128,5 @@ void loop()
     m_x = e.acceleration.x;
     m_y = e.acceleration.y;
     m_z = e.acceleration.z;
+    }
 }
