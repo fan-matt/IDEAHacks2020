@@ -4,6 +4,7 @@
 #include "Accel.h"
 #include "Buzzer.h"
 #include "MatrixPad.h"
+#include "TimeDisplay.h"
 
 // Accelerometer pins
 #define ACCELPOWER 1
@@ -23,11 +24,14 @@ ATime alarm;
 ATime timer;
 bool updated;
 Buzzer b(M1P1, M1P2, M2P1, M2P2);
+TimeDisplay tDisplay;
 UserInput u(MATRIXPAD, Accel(ACCELPOWER, ACCELGROUND, ACCELX, ACCELY, ACCELZ));
 
 // by default open setTime.
 void setup()
 {
+    tDisplay.start();
+  
     // set up pins.
     Serial.begin(9600);
     
@@ -88,4 +92,6 @@ void loop()
         Serial.println(currentTime.seconds);
         updated = true;
     }
+
+    tDisplay.setTime(currentTime);
 }
