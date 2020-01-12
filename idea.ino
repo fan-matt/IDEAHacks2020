@@ -4,6 +4,7 @@
 #include "Buzzer.h"
 #include "MatrixPad.h"
 #include "TimeDisplay.h"
+#include "Adafruit_ADXL345_U.h"
 
 // Motor pins
 #define M1P1 2

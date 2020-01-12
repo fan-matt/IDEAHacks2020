@@ -1,9 +1,6 @@
 #ifndef USERINPUT_H_
 #define USERINPUT_H_
 
-#define HIT_THRESHOLD 200
-
-#include "Accel.h"
 #include "ATime.h"
 #include <Keypad.h>
 
@@ -21,7 +18,6 @@ public:
     void update();
 
 private:
-    Accel m_accel;
     Keypad m_pad;
     int m_count;
     char m_pressed[LIST_MAX];
