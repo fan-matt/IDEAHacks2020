@@ -56,11 +56,6 @@ void UserInput::update()
     }
 
     // update from accelerometer data.
-    int* acc = m_accel.read();
-    if (acc[0] > HIT_THRESHOLD
-        || acc[1] > HIT_THRESHOLD
-        || acc[2] > HIT_THRESHOLD)
-        m_hit = true;
-    else
-        m_hit = false;
+    m_accel.updateAccel();
+    m_hit = m_accel.bigShift();
 }
